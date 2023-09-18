@@ -9,7 +9,9 @@ class FichierMaillage():
         
 
 
-def lit_fichier_msh(fichier_msh) -> []:
+def lit_fichier_msh(fichier_msh, verbose=False) -> []:
+    if(verbose):
+        print("lecture du fichier :",fichier_msh)
     #plt.text()
     #plt.triplot()
     file = open(fichier_msh, 'r')
@@ -35,11 +37,16 @@ def lit_fichier_msh(fichier_msh) -> []:
     for i in range(nba):
        [ar[i,0],ar[i,1],refa[i]] = file.readline().split()
        
-    print("nbn :",nbn,"\n","nbe :", nbe,"nba :","\n", nba,"coord :", coord,"\n","tri :", tri,"\n","ar :", ar,"\n","refn :", refn,"\n","reft :", reft,"\n","refa :", refa,"\n")
+    if(verbose): 
+        print("nbn :",nbn,"\n","nbe :", nbe,"nba :","\n", nba,"coord :", coord,"\n","tri :", tri,"\n","ar :", ar,"\n","refn :", refn,"\n","reft :", reft,"\n","refa :", refa,"\n")
     
     return [nbn,nbe,nba,coord,tri,ar,refn,reft,refa]
 
-def trace_maillage_ind(nbn,nbe,nba,coord,tri,ar):
+def trace_maillage_ind(nbn,nbe,nba,coord,tri,ar, verbose=False):
+    
+    if(verbose):
+        print("traçage du maillage\n")
+    
     fig,ax = plt.subplots()
     ax.set_aspect('equal')
     ax.triplot(coord[:,0],coord[:,1],(tri[:])-1,'go-',lw=1.0)
@@ -47,7 +54,7 @@ def trace_maillage_ind(nbn,nbe,nba,coord,tri,ar):
     #plt.show(block=False))
     return [fig,ax]
 
-def trace_maillage_ref(nbn,nbe,nba,coord,tri,ar,refn,reft,refa):
+def trace_maillage_ref(nbn,nbe,nba,coord,tri,ar,refn,reft,refa, verbose=False):
     fig,ax = trace_maillage_ind(nbn,nbe,nba,coord,tri,ar)
     return [fig,ax]
     #changer les indices par les refs 
@@ -55,16 +62,23 @@ def trace_maillage_ref(nbn,nbe,nba,coord,tri,ar,refn,reft,refa):
     #pour le test
     #plt.show(block=False)
     
-def charge_et_affiche_maillage(FichierMaillage):
+def charge_et_affiche_maillage(FichierMaillage, verbose=False):
     #si ce n'est pas un FichierMaillage (donc surememnt un string) --> créer un fichiermaillage à partir de celui-là
-    
+
     [nbn,nbe,nba,coord,tri,ar,refn,reft,refa] = lit_fichier_msh(FichierMaillage.path)
     fig,ax = trace_maillage_ref(nbn,nbe,nba,coord,tri,ar,refn,reft,refa)
-    plt.show(block=False)
-    return [[nbn,nbe,nba,coord,tri,ar,refn,reft,refa],[fig,ax]] 
+    plt.show()
     
-def pas_et_qualite_maillage(tri,coord):
+    if(verbose):
+        print("lecture du fichier :",FichierMaillage.path)
+        print("nbn :",nbn,"\n","nbe :", nbe,"nba :","\n", nba,"coord :", coord,"\n","tri :", tri,"\n","ar :", ar,"\n","refn :", refn,"\n","reft :", reft,"\n","refa :", refa,"\n")
+     
+    return [[nbn,nbe,nba,coord,tri,ar,refn,reft,refa],[fig,ax]]
+
+def pas_et_qualite_maillage(tri,coord, verbose=False):
     #pour chaque triangle, calculer leur pas & leur qualité, on récupère le max de chaque   
+    if(verbose):
+        print("calcul du pas et de la qualité du maillage")
     pas_max = 0
     qualite_max = 0
     pas = 0
@@ -85,16 +99,11 @@ def pas_et_qualite_maillage(tri,coord):
             qualite_max = qualite
         if(pas > pas_max):
             pas_max = pas
-            
-        
-    
-    
-    
     return [pas_max,qualite_max]
 
 # en parametre les coordonnes des points du triangle dans la forme suivante : 
 # [[i,j],[i,j],[i,j]]
-def rayon_cercle_inscrit(triangle):
+def rayon_cercle_inscrit(triangle, verbose=False):
     longueurs_cotes = [0,0,0]
     
     # calculer la longueur de chaque cote 
@@ -109,7 +118,7 @@ def rayon_cercle_inscrit(triangle):
 
 # en parametre les coordonnes des points du triangle dans la forme suivante : 
 # [[i,j],[i,j],[i,j]]
-def pas_triangle(triangle):
+def pas_triangle(triangle, verbose=False):
     longueur_max = 0
     longueur_cur = 0
     
@@ -124,12 +133,12 @@ def pas_triangle(triangle):
 
 # en parametre les coordonnes des points du triangle dans la forme suivante : 
 # [[i,j],[i,j],[i,j]]
-def qualite_triangle(triangle):
+def qualite_triangle(triangle, verbose=False):
     return math.sqrt(3) / 6 * (pas_triangle(triangle) / rayon_cercle_inscrit(triangle))
 if __name__ == '__main__':
-    print("test:\n")
+    print("Demo:\n")
     #[nbn,nbe,nba,coord,tri,ar,refn,reft,refa] = lit_fichier_msh("D:\\Users\\omkil\\Documents\\CHPS0706\\TP\\Maillages\\m00.msh")
     #trace_maillage_ind(nbn,nbe,nba,coord,tri,ar)
-    [[nbn,nbe,nba,coord,tri,ar,refn,reft,refa],[fig,ax]] = charge_et_affiche_maillage(FichierMaillage("./Maillages\\m1.msh"))
+    [[nbn,nbe,nba,coord,tri,ar,refn,reft,refa],[fig,ax]] = charge_et_affiche_maillage(FichierMaillage("./Maillages\\m1.msh"),verbose=True)
     pas,qualite = pas_et_qualite_maillage(tri,coord)
     print("pas du maillage : ", pas,"\nqualite du maillage: ", qualite)
