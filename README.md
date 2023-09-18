@@ -18,4 +18,4 @@ python3 maillage.py
 
 ## Screenshots - Exemple de sortie
 
-![App Screenshot](https://github.com/iAmako/CHPS_0706_maillage/tree/main/img/output_example.png)
+![App Screenshot](https://github.com/iAmako/CHPS_0706_maillage/blob/main/img/output_example.png)
