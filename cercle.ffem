@@ -1,0 +1,15 @@
+//maillage non structuré d’un cercle
+
+// cercle 2
+real ray=2.0;
+
+//sommets caractèristiques des bords 
+real origine=0.0, y0=0.0;
+
+//paramètrage des bords 
+border a(t=0,2*pi){x=origine+ray*cos(t);y=origine+ray*sin(t);label=1;};
+
+//discrétisation
+mesh Th = buildmesh(a(15));
+plot(Th);
+savemesh(Th, "cercle.msh");

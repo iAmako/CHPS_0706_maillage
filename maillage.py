@@ -142,3 +142,4 @@ if __name__ == '__main__':
     [[nbn,nbe,nba,coord,tri,ar,refn,reft,refa],[fig,ax]] = charge_et_affiche_maillage(FichierMaillage("./Maillages\\m1.msh"),verbose=True)
     pas,qualite = pas_et_qualite_maillage(tri,coord)
     print("pas du maillage : ", pas,"\nqualite du maillage: ", qualite)
+    charge_et_affiche_maillage(FichierMaillage("rectangle_4x2_struct.msh"))
