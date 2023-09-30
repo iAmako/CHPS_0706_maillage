@@ -1,22 +1,24 @@
-//maillage non structuré carré percé par un cercle
+//maillage non structuré d'un pac-man
 
-// carré ]-2,2[x]-2,2[
-real L=4.0;
+int maincircle=1;
+int eyelabel=2;
+int mouth=3;
 
 //sommets caractèristiques des bords 
-real x0=-2.0, y0=-2.0;
-real x1=x0+L, y1=y0;
-real x2=x1, y2=y1+L;
+real xeye=0.2, yeye=0.6;
 
+
+real angleBouche = 0.62; 
 
 //paramètrage des bords 
-
-
-border a(t=0,2*pi){x=1.0*cos(t);y=1.0*sin(t);label=1;};
+border bouche1(t=0, 1){x=(1-t)*cos(2*pi-angleBouche); y=(1-t)*sin(2*pi-angleBouche); label=mouth;};
+border tete(t=angleBouche, 2*pi-angleBouche){x=cos(t); y=sin(t); label=maincircle;}
+border bouche2(t=0, 1){x=t*cos(angleBouche); y=t*sin(angleBouche); label=mouth;};
+border oeil(t=0, 2*pi){x=xeye+0.25*cos(t); y=yeye+0.25*sin(t); label=eyelabel;}
 
 
 //discrétisation
 
-mesh Th = buildmesh(a(50)+b(37)+c(48)+d(76)+e(-25));
+mesh Th = buildmesh(tete(60)+bouche1(30)+bouche2(30)+oeil(-25));
 plot(Th);
-savemesh(Th, "rectangle_perce.msh");
+savemesh(Th, "pacman.msh");
