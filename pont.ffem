@@ -1,6 +1,4 @@
-//maillage non structuré carré percé par un cercle
-
-// carré ]-2,2[x]-2,2[
+//maillage non structuré d'un pont
 real longueur=4.0;
 real largeur=3.0;
 

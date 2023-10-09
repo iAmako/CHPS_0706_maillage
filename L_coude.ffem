@@ -1,4 +1,4 @@
-//maillage non structuré d'un L coudé
+//maillage non structuré d'une équerre
 
 // L ]-2,2[x]-2,2[
 real l=3.0;

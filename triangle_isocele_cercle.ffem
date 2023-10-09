@@ -1,6 +1,4 @@
-//maillage non structuré d’un rectangle
-
-//triangle isocele qui entoure un cercle de rayon unité
+//maillage non structuré d'un triangle isocele qui entoure un cercle de rayon unité
 int triangle = 1;
 int cercle = 2;
 real L=-4.0;
