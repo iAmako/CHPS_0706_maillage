@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.tri as tri
 import math
 
+#plot_trifsurf(coord[0,:],coord[:,1,Uh,tri]) --> sera utile 
+
 class FichierMaillage():
     def __init__(self,path_to_file):
         self.path = path_to_file
@@ -55,12 +57,16 @@ def trace_maillage_ind(nbn,nbe,nba,coord,tri,ar, verbose=False):
     return [fig,ax]
 
 def trace_maillage_ref(nbn,nbe,nba,coord,tri,ar,refn,reft,refa, verbose=False):
-    fig,ax = trace_maillage_ind(nbn,nbe,nba,coord,tri,ar)
-    return [fig,ax]
-    #changer les indices par les refs 
+    if(verbose):
+        print("traçage du maillage\n")
     
+    fig,ax = plt.subplots()
+    ax.set_aspect('equal')
+    ax.triplot(coord[:,0],coord[:,1],(tri[:])-1,'go-',lw=1.0)
+    #changer les indices par les refs 
     #pour le test
     #plt.show(block=False)
+    return [fig,ax]
     
 def charge_et_affiche_maillage(FichierMaillage, verbose=False):
     #si ce n'est pas un FichierMaillage (donc surememnt un string) --> créer un fichiermaillage à partir de celui-là
@@ -139,7 +145,12 @@ if __name__ == '__main__':
     print("Demo:\n")
     #[nbn,nbe,nba,coord,tri,ar,refn,reft,refa] = lit_fichier_msh("D:\\Users\\omkil\\Documents\\CHPS0706\\TP\\Maillages\\m00.msh")
     #trace_maillage_ind(nbn,nbe,nba,coord,tri,ar)
-    [[nbn,nbe,nba,coord,tri,ar,refn,reft,refa],[fig,ax]] = charge_et_affiche_maillage(FichierMaillage("./Maillages\\m1.msh"),verbose=True)
-    pas,qualite = pas_et_qualite_maillage(tri,coord)
-    print("pas du maillage : ", pas,"\nqualite du maillage: ", qualite)
-    charge_et_affiche_maillage(FichierMaillage("rectangle_4x2_struct.msh"))
+    
+    paths = ["./Maillages\\m1.msh","./Maillages\\m2.msh","./Maillages\\m3.msh","./Maillages\\m4.msh"]
+    
+    for path in paths:
+    
+        [[nbn,nbe,nba,coord,tri,ar,refn,reft,refa],[fig,ax]] = charge_et_affiche_maillage(FichierMaillage(path),verbose=False)
+        pas,qualite = pas_et_qualite_maillage(tri,coord)
+        print("pas du maillage : ", pas,"\nqualite du maillage: ", qualite)
+        charge_et_affiche_maillage(FichierMaillage("rectangle_4x2_struct.msh"))
