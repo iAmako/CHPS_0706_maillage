@@ -1,34 +1,30 @@
-//validation.ffem
+// Parametres
+func u0 = 10. + 90.*x/6.;
+func k = 1.8*(y<0.5) + 0.2;
+real ue = 25.;
+real alpha=10000;
+real T=5.;
+real dt=0.1 ;
+
+// Mesh
 mesh Th = readmesh("Maillages/m1.msh");
-int codeDir = 1;
-func u = 1.0+sin(0.5*pi*x) + x * (x - 4.0) * cos (0.5 * pi * y); // validation_pen = même chose mais avec fourier-robin 
-func f = (pi^2/4)*sin((pi*x)/2) - 2*cos((pi*y)/2) + x*(x-4)*(pi^2/4)*cos((pi*y)/2);
-func uE = 1.0;
 
-fespace Vh(Th,P1); //Espace EF-P1
-Vh uh, vh; //inconnue & Fct test
-problem PBLAPLACE(uh, vh, solver=Cholesky) = 
-    int2d(Th)(dx(uh)*dx(vh)+dy(uh)*dy(vh)) 
-    - int2d(Th)(f*vh) 
-    + on (codeDir, uh=uE);//décla = FV
-PBLAPLACE;//Appel au solver EF => calcul de uh
+ // Fespace
+fespace Vh(Th, P1);
+Vh u=u0, v, uold;
 
-//Calcul d'Erreurs : 
-varf b(uh,vh) = int2d(Th)
-                (dx(uh)*dx(vh)
-                +dy(uh)*dy(vh)); //forme bilinéaire
-matrix K = b(Vh,Vh); //matrice de rigidité 
-Vh KEh, Eh = u-uh;
-KEh[] = K * Eh[];
-real eh = sqrt(Eh[]'*KEh[]); // ' == transposé 
-cout << "eh = |u - uh|_H1 = " << eh << endl;
+// Fourier-Robin
+problem LAPLACE(u, v)
+= int2d(Th)( u*v/dt + k*(dx(u) * dx(v) + dy(u) * dy(v)) )
++ int1d(Th, 1, 3)(alpha*u*v)
+- int1d(Th, 1, 3)(alpha*ue*v)
+- int2d(Th)(uold*v/dt)
++ on(2, 4, u=u0);
 
-plot(Th,uh,cmm = "Solution EF-P1 uh");
 
-//quand on voit le graphique ? -> l'aide
-//                           f -> niveau de couleur / chaleur 
-//                           N -> augmenter le niveau de couleur (la précision)w 
-//                           m -> Montrer ou cacher le maillage 
-//                           3 -> Passer en 3D 
-//                           v -> 
-// sequence f m v 3 N 
+for(real t = 0; t < T; t += dt){
+uold = u;
+LAPLACE; 
+
+plot(u);
+}
