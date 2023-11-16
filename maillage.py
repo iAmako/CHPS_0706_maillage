@@ -9,8 +9,19 @@ class FichierMaillage():
     def __init__(self,path_to_file):
         self.path = path_to_file
         
-
-
+class Maillage(object):
+    def __init__(self, path):
+        (self.nbn,
+         self.nbe,
+         self.nba,
+         self.coord,
+         self.tri,
+         self.ar,
+         self.refn,
+         self.reft,
+         self.refa) = lit_fichier_msh(path)
+        
+        
 def lit_fichier_msh(fichier_msh, verbose=False) -> []:
     if(verbose):
         print("lecture du fichier :",fichier_msh)
