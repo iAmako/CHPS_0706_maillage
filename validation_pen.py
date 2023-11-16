@@ -31,10 +31,11 @@ def fct_alpha():#x,y
 
 #mes(truc) = aire du triangle 
 def coeffelem_P1_rigid(Tri):
-    res = np.array(3,3)
-    res[1,1] = ( (fct_kappa()) / 4 * area(Tri) ) * ((Tri[1][0]-Tri[2][0])**2 +  (Tri[1][1]-Tri[2][1])**2)  
-    res[2,2] = ( (fct_kappa()) / 4 * area(Tri) ) * ((Tri[2][0]-Tri[0][0])**2 + (Tri[2][1]-Tri[0][1])**2)  
-    res[3,3] = ( (fct_kappa()) / 4 * area(Tri) ) * ((Tri[0][0]-Tri[1][0])**2 + (Tri[0][1]-Tri[1][1])**2)  
+    k = np.array(3,3)
+    
+    k[1,1] = ( (fct_kappa()) / 4 * area(Tri) ) * ((Tri[1][0]-Tri[2][0])**2 +  (Tri[1][1]-Tri[2][1])**2)  
+    k[2,2] = ( (fct_kappa()) / 4 * area(Tri) ) * ((Tri[2][0]-Tri[0][0])**2 + (Tri[2][1]-Tri[0][1])**2)  
+    k[3,3] = ( (fct_kappa()) / 4 * area(Tri) ) * ((Tri[0][0]-Tri[1][0])**2 + (Tri[0][1]-Tri[1][1])**2)  
     
     '''
     res[1,1] = ( (fct_kappa()) / 4 * area(Tri) ) * ((x2-x3)**2 + (y2-y3)**2)  
@@ -42,9 +43,9 @@ def coeffelem_P1_rigid(Tri):
     res[3,3] = ( (fct_kappa()) / 4 * area(Tri) ) * ((x1-x2)**2 + (y1-y2)**2)  
     '''
     
-    res[1,2] = res[2,1] = ( (fct_kappa()) / 4 * area(Tri) ) * ()  #TODO PAGE 3/5
-    res[1,3] = res[3,1] = ( (fct_kappa()) / 4 * area(Tri) ) * ()  
-    res[2,3] = res[3,2] = ( (fct_kappa()) / 4 * area(Tri) ) * ()  
+    k[1,2] = k[2,1] = ( (fct_kappa()) / 4 * area(Tri) ) * ()  #TODO PAGE 3/5
+    k[1,3] = k[3,1] = ( (fct_kappa()) / 4 * area(Tri) ) * ()  
+    k[2,3] = k[3,2] = ( (fct_kappa()) / 4 * area(Tri) ) * ()  
     
     return
 
