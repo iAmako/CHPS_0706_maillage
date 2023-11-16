@@ -26,7 +26,7 @@ def area(Tri):
 
 #la solution exacte u(x, y) = 1 + sin((π/2)*x) + x(x − 4) cos((π/2)*y) (ici connue)
 def fct_u(x,y):
-    return  1 + sin((pi/2)*x) + x(x - 4) * cos((pi/2)*y)
+    return  1 + sin((pi/2)*x) + x*(x - 4) * cos((pi/2)*y)
 
 #la température extérieure uE(x, y) = 1 ici (au bord de Dirichlet/Fourier-Robin)
 def fct_uE():#x,y
@@ -114,7 +114,7 @@ def assemblage_EF_P1(nbn,nbe,nba,coord,tri,ar,refn,reft,refa,trirefs):
         A[I3,I3] += kl[2][2]
         F[I3] += fl[2]
         
-    K = A #conservation de la matrice de Rigidité 
+    K = np.copy(A) #conservation de la matrice de Rigidité 
     
     for a in range(0,2):
         #calcul des coefficients d'arêtes 
@@ -136,7 +136,7 @@ def assemblage_EF_P1(nbn,nbe,nba,coord,tri,ar,refn,reft,refa,trirefs):
         
         print("Arete n°",a,"A = ",A,"F = ",F)
         
-    return A,F
+    return A,F,K
 
 
 def validation(path):
@@ -168,7 +168,7 @@ def validation(path):
     print("nba = " + str(maillage.nba))
 
     #ça fonctionne jusque là :p
-    A,F = assemblage_EF_P1(maillage.nbn,maillage.nbe,maillage.nba,maillage.coord,maillage.tri,maillage.ar,maillage.refn,maillage.reft,maillage.refa,tri_coords_from_refs(maillage.tri,maillage.coord))
+    A,F,K = assemblage_EF_P1(maillage.nbn,maillage.nbe,maillage.nba,maillage.coord,maillage.tri,maillage.ar,maillage.refn,maillage.reft,maillage.refa,tri_coords_from_refs(maillage.tri,maillage.coord))
     print("A = ",A)
     #affichage de A
     print("F = ",F)
@@ -187,8 +187,13 @@ def validation(path):
     print(" {           mean(Uh) : ",Uh.mean())#moyenneUh
     print(" {            h       : ",h)#h, le pas
     print(" {            Q       : ",Q)#Q, la qualité 
-    print(" {erreur |uh-rh(u)|_H1: ",abs(Uh))#1ère erreur
-    print(" {erreur |Uh-U|_inf   : ")#2ème erreur
+    
+    U = np.array([0. for x in range(len(maillage.coord))])
+    for i in range(len(maillage.coord)):
+        U[i] = fct_u(maillage.coord[i][0], maillage.coord[i][1])
+    
+    print(" {erreur |uh-rh(u)|_H1: ",sqrt(np.matmul(np.matmul(np.transpose(U-Uh),K),(U-Uh))))#1ère erreur
+    print(" {erreur |Uh-U|_inf   : ",max(Uh-U))#2ème erreur
     print(" ________________________________________")
     
     print("================= validation_pas_a_pas =================")
