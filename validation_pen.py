@@ -46,22 +46,18 @@ def fct_alpha():#x,y
 
 #mes(truc) = aire du triangle 
 def coeffelem_P1_rigid(Tri):
-    res = np.array(3,3)
-    res[1,1] = ( (fct_kappa()) / 4 * area(Tri) ) * ((Tri[1][0]-Tri[2][0])**2 +  (Tri[1][1]-Tri[2][1])**2)  
-    res[2,2] = ( (fct_kappa()) / 4 * area(Tri) ) * ((Tri[2][0]-Tri[0][0])**2 + (Tri[2][1]-Tri[0][1])**2)  
-    res[3,3] = ( (fct_kappa()) / 4 * area(Tri) ) * ((Tri[0][0]-Tri[1][0])**2 + (Tri[0][1]-Tri[1][1])**2)  
-    
-    '''
-    res[1,1] = ( (fct_kappa()) / 4 * area(Tri) ) * ((x2-x3)**2 + (y2-y3)**2)  
-    res[2,2] = ( (fct_kappa()) / 4 * area(Tri) ) * ((x3-x1)**2 + (y3-y1)**2)  
-    res[3,3] = ( (fct_kappa()) / 4 * area(Tri) ) * ((x1-x2)**2 + (y1-y2)**2)  
-    '''
-    
-    res[1,2] = res[2,1] = ( (fct_kappa()) / 4 * area(Tri) ) * ()  #TODO PAGE 3/5
-    res[1,3] = res[3,1] = ( (fct_kappa()) / 4 * area(Tri) ) * ()  
-    res[2,3] = res[3,2] = ( (fct_kappa()) / 4 * area(Tri) ) * ()  
+    k = np.array([[0.,0.,0.],[0.,0.,0.],[0.,0.,0.]])
+    c = (fct_kappa()) / (4 * area(Tri))
+    k[0,0] = c * ((Tri[1][0]-Tri[2][0])**2 +  (Tri[1][1]-Tri[2][1])**2)  
+    k[1,1] = c * ((Tri[2][0]-Tri[0][0])**2 + (Tri[2][1]-Tri[0][1])**2)  
+    k[2,2] = c * ((Tri[0][0]-Tri[1][0])**2 + (Tri[0][1]-Tri[1][1])**2)  
+
+    k[0,1] = k[1,0] = c * ( - (Tri[0][0]-Tri[2][0]) * (Tri[1][0]-Tri[2][0]) - (Tri[0][1] - Tri[2][1]) * (Tri[1][1] - Tri[2][1])) 
+    k[0,2] = k[2,0] = c * ( - (Tri[2][0]-Tri[1][0]) * (Tri[0][0]-Tri[1][0]) - (Tri[2][1] - Tri[1][1]) * (Tri[0][1] - Tri[1][1])) 
+    k[1,2] = k[2,1] = c * ( - (Tri[1][0]-Tri[0][0]) * (Tri[2][0]-Tri[0][0]) - (Tri[1][1] - Tri[0][1]) * (Tri[2][1] - Tri[0][1])) 
     
     return k
+
 
 
 def coeffelem_P1_source(Tri):
@@ -139,7 +135,7 @@ def assemblage_EF_P1(nbn,nbe,nba,coord,tri,ar,refn,reft,refa,trirefs):
         A[I2,I2] += pa[1][1]
         F[I2]    += ea[1]
         
-        print("Arete n°",a,"A = ",A,"F = ",F)
+        #print("Arete n°",a,"A = ",A,"F = ",F)
         
     return A,F,K
 
