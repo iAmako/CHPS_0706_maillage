@@ -117,12 +117,15 @@ def assemblage_EF_P1(nbn,nbe,nba,coord,tri,ar,refn,reft,refa,trirefs):
         
     K = np.copy(A) #conservation de la matrice de Rigidité 
     
-    for a in range(0,2):
+    gammaf = []
+    for i in range(len(ar)):
+        if(refa[i] == 1): 
+            gammaf.append(ar[i])    
+    for a in gammaf:
         #calcul des coefficients d'arêtes 
-
             
-        I1 = int(ar[a][0]-1)
-        I2 = int(ar[a][1]-1)
+        I1 = int(a[0]-1)
+        I2 = int(a[1]-1)
         
         pa = coeffelem_P1_poids(coord[I1], coord[I2])
         ea = coeffelem_P1_transf(coord[I1], coord[I2])
